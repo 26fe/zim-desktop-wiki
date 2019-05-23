@@ -1,7 +1,7 @@
 
 # Copyright 2008-2014 Jaap Karssenberg <jaap.karssenberg@gmail.com>
 
-# Supported sytax
+# Supported syntax
 #   [% .. %] and <!--[% .. %]-->
 #
 # Instructions:
@@ -77,7 +77,7 @@ def list_template_categories():
 
 def list_templates(category):
 	'''Returns a list of template names
-	@param category: a category (sub folder) with tempaltes, e.g. "html"
+	@param category: a category (sub folder) with templates, e.g. "html"
 	@returns: a list of 2-tuples of the template names and the file
 	basename for the template file
 	'''

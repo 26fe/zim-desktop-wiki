@@ -186,6 +186,9 @@ ui_preferences = (
 	('autolink_camelcase', 'bool', 'Editing',
 		_('Automatically turn "CamelCase" words into links'), True),
 		# T: option in preferences dialog
+	('autolink_xyz', 'bool', 'Editing',
+	    _('Automatically turn "xyz:zyx" into links'), True),
+	    # T: option in preferences dialog
 	('autolink_files', 'bool', 'Editing',
 		_('Automatically turn file paths into links'), True),
 		# T: option in preferences dialog
@@ -236,11 +239,14 @@ SCROLL_TO_MARK_MARGIN = 0.2
 
 # Regexes used for autoformatting
 heading_re = Re(r'^(={2,7})\s*(.*)\s*(\1)?$')
+
 page_re = Re(r'''(
 	  [\w\.\-\(\)]*(?: :[\w\.\-\(\)]{2,} )+:?
 	| \+\w[\w\.\-\(\)]+(?: :[\w\.\-\(\)]{2,} )*:?
 )$''', re.X | re.U) # e.g. namespace:page or +subpage, but not word without ':' or '+'
+
 interwiki_re = Re(r'\w[\w\+\-\.]+\?\w\S+$', re.U) # name?page, where page can be any url style
+
 file_re = Re(r'''(
 	  ~/[^/\s]
 	| ~[^/\s]*/
@@ -579,6 +585,7 @@ class TextBuffer(Gtk.TextBuffer):
 		'indent': Integer(None),
 		'underline': ConfigDefinitionConstant(None, Pango.Underline, 'PANGO_UNDERLINE'),
 		'linespacing': Integer(None),
+		'linespacing2': Integer(None),
 		'rise': Integer(None),
 	} #: Valid properties for a style in tag_styles
 
@@ -4235,7 +4242,7 @@ class TextView(Gtk.TextView):
 			apply_tag(tag_re[0])
 		elif url_re.match(word):
 			apply_link(url_re[0])
-		elif page_re.match(word):
+		elif self.preferences['autolink_xyz'] and page_re.match(word):
 			# Do not link "10:20h", "10:20PM" etc. so check two letters before first ":"
 			w = word.strip(':').split(':')
 			if w and twoletter_re.search(w[0]):
@@ -5169,6 +5176,7 @@ class PageView(GSignalEmitterMixin, Gtk.VBox):
 			follow_on_enter=Boolean(True),
 			read_only_cursor=Boolean(False),
 			autolink_camelcase=Boolean(True),
+			autolink_xyz=Boolean(True),
 			autolink_files=Boolean(True),
 			autoselect=Boolean(True),
 			unindent_on_backspace=Boolean(True),
@@ -5298,6 +5306,7 @@ class PageView(GSignalEmitterMixin, Gtk.VBox):
 			# Don't set a default for 'tabs' as not to break pages that
 			# were created before this setting was introduced.
 		self.text_style['TextView'].setdefault('linespacing', 3)
+		self.text_style['TextView'].setdefault('linespacing2', 3)
 		self.text_style['TextView'].setdefault('font', None, str)
 		self.text_style['TextView'].setdefault('justify', None, str)
 		#~ print self.text_style['TextView']
@@ -5312,6 +5321,9 @@ class PageView(GSignalEmitterMixin, Gtk.VBox):
 
 		if self.text_style['TextView']['linespacing']:
 			self.textview.set_pixels_below_lines(self.text_style['TextView']['linespacing'])
+
+		if self.text_style['TextView']['linespacing']:
+			self.textview.set_pixels_inside_wrap(self.text_style['TextView']['linespacing2'])
 
 		if self.text_style['TextView']['font']:
 			font = Pango.FontDescription(self.text_style['TextView']['font'])
@@ -5347,6 +5359,8 @@ class PageView(GSignalEmitterMixin, Gtk.VBox):
 				attrib = dict(i for i in list(section.items()) if i[1] is not None)
 				if 'linespacing' in attrib:
 					attrib['pixels-below-lines'] = attrib.pop('linespacing')
+				if 'linespacing2' in attrib:
+					attrib['pixels-inside-wrap'] = attrib.pop('linespacing2')
 
 				#~ print('TAG', tag, attrib)
 				testtag = testbuffer.create_tag('style-' + tag, **attrib)
