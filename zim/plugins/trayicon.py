@@ -54,9 +54,9 @@ def set_global_trayicon(classic=False):
 
 
 class TrayIconPluginCommand(GtkCommand):
-	'''Class to handle "zim --plugin trayicon" allows starting zim in
+	"""Class to handle "zim --plugin trayicon" allows starting zim in
 	the background and only show a trayicon
-	'''
+	"""
 
 	def run(self):
 		preferences = ConfigManager.preferences['TrayIconPlugin']

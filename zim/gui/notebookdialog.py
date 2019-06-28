@@ -4,8 +4,8 @@
 '''This module contains the notebook dialog which is used for the
 "open another notebook" action and which is shown if you start zim without
 argument. The dialog directly modifies the notebook list obtained from
-zim.notebook.get_notebook_list(). A special dropdown allows settign the
-special entry for the default notebook which will be openend directly
+zim.notebook.get_notebook_list(). A special dropdown allows setting the
+special entry for the default notebook which will be opened directly
 the next time zim is started without arguments.
 
 @newfield column: Column, Columns

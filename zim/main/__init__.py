@@ -602,7 +602,7 @@ def build_command(args, pwd=None):
 
 
 class ZimApplication(object):
-	'''This object is repsonsible for managing the life cycle of the
+	'''This object is responsible for managing the life cycle of the
 	application process.
 
 	To do so, it decides whether to dispatch a command to an already

@@ -273,7 +273,7 @@ class Re(object):
 		my_re = Re('^(\w[\w\+\-\.]+)\?(.*)')
 
 		if my_re.match(string):
-			print my_re[1], my_re[2]
+			print(my_re[1], my_re[2])
 	'''
 
 	# TODO, mimic complete interface for regex object including
