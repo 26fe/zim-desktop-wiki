@@ -186,6 +186,9 @@ ui_preferences = (
 	('autolink_camelcase', 'bool', 'Editing',
 		_('Automatically turn "CamelCase" words into links'), True),
 		# T: option in preferences dialog
+	('autolink_wiki_path', 'bool', 'Editing',
+	 _('Automatically turn wiki path (xyz:xyz, +xyz:xyz) into links'), True),
+		# T: option in preferences dialog
 	('autolink_files', 'bool', 'Editing',
 		_('Automatically turn file paths into links'), True),
 		# T: option in preferences dialog
@@ -237,7 +240,7 @@ SCROLL_TO_MARK_MARGIN = 0.2
 # Regexes used for autoformatting
 heading_re = Re(r'^(={2,7})\s*(.*)\s*(\1)?$')
 page_re = Re(r'''(
-	  [\w\.\-\(\)]*(?: :[\w\.\-\(\)]{2,} )+:?
+	[\w\.\-\(\)]*(?: :[\w\.\-\(\)]{2,} )+:?
 	| \+\w[\w\.\-\(\)]+(?: :[\w\.\-\(\)]{2,} )*:?
 )$''', re.X | re.U) # e.g. namespace:page or +subpage, but not word without ':' or '+'
 interwiki_re = Re(r'\w[\w\+\-\.]+\?\w\S+$', re.U) # name?page, where page can be any url style
@@ -4234,7 +4237,7 @@ class TextView(Gtk.TextView):
 			apply_tag(tag_re[0])
 		elif url_re.match(word):
 			apply_link(url_re[0])
-		elif page_re.match(word):
+		elif self.preferences['autolink_wiki_path'] and page_re.match(word):
 			# Do not link "10:20h", "10:20PM" etc. so check two letters before first ":"
 			w = word.strip(':').split(':')
 			if w and twoletter_re.search(w[0]):
@@ -5168,6 +5171,7 @@ class PageView(GSignalEmitterMixin, Gtk.VBox):
 			follow_on_enter=Boolean(True),
 			read_only_cursor=Boolean(False),
 			autolink_camelcase=Boolean(True),
+			autolink_wiki_path=Boolean(True),
 			autolink_files=Boolean(True),
 			autoselect=Boolean(True),
 			unindent_on_backspace=Boolean(True),

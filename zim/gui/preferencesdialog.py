@@ -64,7 +64,7 @@ class PreferencesDialog(Dialog):
 		self.vbox.pack_start(gtknotebook, True, True, 0)
 		self.forms = {}
 
-		############################### needs rewrite to make defintion more robust
+		############################### needs rewrite to make definition more robust
 		for category in ('Interface', 'Editing'):
 			vbox = Gtk.VBox()
 			index = gtknotebook.append_page(vbox, Gtk.Label(label=_(category)))

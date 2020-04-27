@@ -602,7 +602,7 @@ def build_command(args, pwd=None):
 
 
 class ZimApplication(object):
-	'''This object is repsonsible for managing the life cycle of the
+	'''This object is responsible for managing the life cycle of the
 	application process.
 
 	To do so, it decides whether to dispatch a command to an already
@@ -728,9 +728,9 @@ class ZimApplication(object):
 		# python GIL during C calls, so threads may block while main loop is
 		# waiting. Thus threads become very slow and unpredictable unless we
 		# actively monitor them from the mainloop, causing python to run
-		# frequently. So be very carefull relying on threads.
+		# frequently. So be very careful relying on threads.
 		# Re-evaluate when we are above PyGObject 3.10.2 - threading should
-		# wotk bettter there even without this statement. (But even then,
+		# work better there even without this statement. (But even then,
 		# no Gtk calls from threads, just "GObject.idle_add()". )
 		# Kept for windows, because we need thread to run ipc listener, and no
 		# crashes observed there.

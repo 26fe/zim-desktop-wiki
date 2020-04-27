@@ -14,7 +14,7 @@ from zim.notebook import get_notebook_list, NotebookInfo, NotebookInfoList
 
 from zim.gui.mainwindow import MainWindowExtension
 
-# Try if we are on Ubunutu with app-indicator support
+# Try if we are on Ubuntu with app-indicator support
 try:
 	import gi
 	gi.require_version('AppIndicator3', '0.1')
